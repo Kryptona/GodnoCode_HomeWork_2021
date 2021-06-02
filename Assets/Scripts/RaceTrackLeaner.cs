@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Race
 {
@@ -12,65 +14,34 @@ namespace Race
     /// </summary>
     public class RaceTrackLeaner : RaceTrack
     {
-        [Header("Leaner track properties")] [SerializeField]
-        private Transform m_Start;
-
-        [SerializeField] private Transform m_End;
-
-        public override Vector3 GetPosition(float distance)
+        public override Vector3 GetPosition(float distance, Vector3 m_End, Vector3 m_Start)
         {
-            //Clamp - принимает значение, min
-            // distance = Mathf.Clamp(distance, 0, GetTrackLength());
+            Vector3 direction = m_End - m_Start;
 
-            Vector3 direction = m_End.position - m_Start.position;
-            
-            // if ((m_Start.position + distance * direction.normalized).magnitude > direction.magnitude)
             if (distance > direction.magnitude)
             {
-                m_TestDistance = m_Start.position.magnitude;
-                return m_Start.position;
+                distance = m_Start.magnitude;
+                return m_Start;
             }
 
             if (distance < 0)
             {
-                m_TestDistance = m_End.position.magnitude;
-                return m_End.position;
+                distance = m_End.magnitude;
+                return m_End;
             }
-            
-            return m_Start.position + direction.normalized * distance;
+
+            return m_Start + direction.normalized * distance;
         }
 
-        public override Vector3 GetDirection(float distance)
+        public override Vector3 GetDirection(float distance, Vector3 m_End, Vector3 m_Start)
         {
-            return (m_End.position - m_Start.position).normalized;
+            return (m_End - m_Start).normalized;
         }
 
-        public override float GetTrackLength()
+        public override float GetTrackLength(Vector3 m_End, Vector3 m_Start)
         {
-            Vector3 direction = m_End.position - m_Start.position;
+            Vector3 direction = m_End - m_Start;
             return direction.magnitude;
         }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(m_Start.position, m_End.position);
-        }
-
-        #region Test
-
-        [SerializeField] private float m_TestDistance;
-        [SerializeField] private Transform m_TestObject;
-
-        /// <summary>
-        /// Для валидации данных класса
-        /// </summary>
-        private void OnValidate()
-        {
-            m_TestObject.position = GetPosition(m_TestDistance);
-            m_TestObject.forward = GetDirection(m_TestDistance);
-        }
-
-        #endregion
     }
 }

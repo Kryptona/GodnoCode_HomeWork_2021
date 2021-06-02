@@ -21,14 +21,14 @@ namespace Race
         /// Возвращает длину трека
         /// </summary>
         /// <returns></returns>
-        public abstract float GetTrackLength();
+        public abstract float GetTrackLength(Vector3 m_End, Vector3 m_Start);
 
         /// <summary>
         /// Вовзращает позицию в 3Д кривой центр-линии трубы
         /// </summary>
         /// <param name="distance"></param> дистанция от начала трубы до ее GetTrackLength
         /// <returns></returns>
-        public abstract Vector3 GetPosition(float distance);
+        public abstract Vector3 GetPosition(float distance, Vector3 end, Vector3 start);
 
         /// <summary>
         /// Возвращает  направление в 3Д кривой центр-линии трубы
@@ -36,6 +36,6 @@ namespace Race
         /// </summary>
         /// <param name="distance"></param>
         /// <returns></returns>
-        public abstract Vector3 GetDirection(float distance);
+        public abstract Vector3 GetDirection(float distance, Vector3 end, Vector3 start);
     }
 }
