@@ -6,16 +6,30 @@ using UnityEngine;
 
 namespace Race
 {
+    /// <summary>
+    /// Класс, реализующий движение объекта
+    /// </summary>
     public class Movement : MonoBehaviour
     {
+        /// <summary>
+        /// Скорость объекта
+        /// </summary>
         [SerializeField] private int speed;
 
+        /// <summary>
+        /// Массив объектов, которые выполняют роль траектории
+        /// </summary>
         [SerializeField] private Transform[] points;
 
+        /// <summary>
+        /// Начальный индекс в points[] (для отрезка)
+        /// </summary>
         private int startIndex = 0;
-        private int finishIndex = 1;
 
-        [SerializeField] private RaceTrackLeaner @params;
+        /// <summary>
+        /// Конечный индекс в points[] (для отрезка)
+        /// </summary>
+        private int finishIndex = 1;
 
         [SerializeField] private float distance;
         [SerializeField] private Transform obj;
@@ -43,10 +57,16 @@ namespace Race
             }
         }
 
+        /// <summary>
+        /// Для движения объекта
+        /// </summary>
+        /// <param name="start"></param> Начальное положение объекта
+        /// <param name="finish"></param> Конечное положение
+        /// <returns></returns> Достиг ли точки назначения
         private bool Move(Vector3 start, Vector3 finish)
         {
-            var length = @params.GetTrackLength(finish, start);
-            if (@params.GetTrackLength(obj.position, start) >= length)
+            var length = GetSectionLength(finish, start);
+            if (GetSectionLength(obj.position, start) >= length)
             {
                 obj.position = finish;
                 return true;
@@ -54,6 +74,18 @@ namespace Race
 
             obj.transform.position = Vector3.MoveTowards(obj.transform.position, finish, speed * Time.deltaTime);
             return false;
+        }
+        
+        /// <summary>
+        /// Возвращает длину отрезка
+        /// </summary>
+        /// <param name="m_End"></param>
+        /// <param name="m_Start"></param>
+        /// <returns></returns>
+        private float GetSectionLength(Vector3 m_End, Vector3 m_Start)
+        {
+            Vector3 direction = m_End - m_Start;
+            return direction.magnitude;
         }
     }
 }
