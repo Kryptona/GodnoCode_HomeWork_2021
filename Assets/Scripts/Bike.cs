@@ -17,7 +17,11 @@ namespace Race
 
         [Range(0.0f, 100.0f)] public float agility;
         [Range(0.0f, 1.0f)] public float leanerDrag;
+
+        [Range(0.0f, 1.0f)] public float collisionBounceFactor;
+
         public float maxSpeed;
+        public float maxSpeedRotation;
 
         public bool afterburner;
 
@@ -38,6 +42,7 @@ namespace Race
         private float _distance;
         private float _velocity;
         private float _rollAngle;
+        private float _rollVelocity;
 
 
         /// <summary>
@@ -60,32 +65,35 @@ namespace Race
 
         private void FixedUpdate()
         {
-            // MoveBike();
             UpdateBikePhysics();
-        }
-
-        private void MoveBike()
-        {
-            var currentForwardVelocity = _forwardThrustAxis * _bikeParametersInit.maxSpeed;
-            Vector3 forwardMoveDelta = Time.deltaTime * currentForwardVelocity * transform.forward;
-            transform.position += forwardMoveDelta;
         }
 
         private void UpdateBikePhysics()
         {
             float dt = Time.deltaTime;
-            float dv = dt * _forwardThrustAxis * _bikeParametersInit.thrust;
-            _velocity += dv;
+            _velocity += dt * _forwardThrustAxis * _bikeParametersInit.thrust;
+            _rollVelocity += dt * _horizontalThrustAxis * _bikeParametersInit.agility;
 
             _velocity = Mathf.Clamp(_velocity, -_bikeParametersInit.maxSpeed, _bikeParametersInit.maxSpeed);
-            _distance += _velocity * dt;
+            _rollVelocity = Mathf.Clamp(_rollVelocity, -_bikeParametersInit.maxSpeedRotation, _bikeParametersInit.maxSpeedRotation);
+
+            float dS = _velocity * dt;
+            //collision
+            if (Physics.Raycast(transform.position, transform.forward, dS))
+            {
+                _velocity = -_velocity * _bikeParametersInit.collisionBounceFactor;
+                dS = _velocity * dt;
+            }
+
+            _distance += dS;
 
             _velocity += -_velocity * _bikeParametersInit.leanerDrag * dt;
+            _rollVelocity += -_rollVelocity * _bikeParametersInit.leanerDrag * dt;
 
             if (_distance < 0)
                 _distance = 0;
 
-            _rollAngle += _bikeParametersInit.agility * dt * _horizontalThrustAxis;
+            _rollAngle += _rollVelocity * dt;
 
             Vector3 bikePos = _track.GetPosition(_distance);
             Vector3 bikeDir = _track.GetDirection(_distance);
