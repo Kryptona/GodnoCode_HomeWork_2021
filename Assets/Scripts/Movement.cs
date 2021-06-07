@@ -34,9 +34,7 @@ namespace Race
         [SerializeField] private float distance;
         [SerializeField] private Transform obj;
 
-        /// <summary>
-        /// Для валидации данных класса
-        /// </summary>
+     
         private void FixedUpdate()
         {
             if (Move(points[startIndex].position, points[finishIndex].position))
