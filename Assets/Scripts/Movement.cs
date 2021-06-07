@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,6 +43,11 @@ namespace Race
             {
                 startIndex = (startIndex + 1) % points.Length;
                 finishIndex = (finishIndex + 1) % points.Length;
+                if (finishIndex == 0) {
+                    startIndex = 0;
+                    finishIndex = 1;
+                    obj.transform.position = points[0].position;
+                }
             }
         }
 
@@ -75,7 +80,7 @@ namespace Race
             obj.transform.position = Vector3.MoveTowards(obj.transform.position, finish, speed * Time.deltaTime);
             return false;
         }
-        
+
         /// <summary>
         /// Возвращает длину отрезка
         /// </summary>
