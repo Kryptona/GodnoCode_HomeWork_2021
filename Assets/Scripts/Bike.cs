@@ -17,6 +17,10 @@ namespace Race
 
         public float afterBurnerThrust;
 
+        public float afterBurnerCoolSpeed; // per second
+        public float afterBurnerHeatGeneration; // per second
+        public float afterBurnerMaxHeat; // per second
+
         [Range(0.0f, 100.0f)] public float agility;
         [Range(0.0f, 1.0f)] public float leanerDrag;
 
@@ -44,11 +48,12 @@ namespace Race
 
         [SerializeField] private RaceTrack _track;
 
+        private float _afterBurnerHeat;
+
         private float _distance;
         private float _velocity;
         private float _rollAngle;
         private float _rollVelocity;
-        public float RollVelocity => _rollVelocity;
 
         public float Distance => _distance;
         public float Velocity => _velocity;
@@ -72,8 +77,6 @@ namespace Race
         /// </summary>
         private float _horizontalThrustAxis;
 
-        public float HorizontalThrustAxis => _horizontalThrustAxis;
-
         /// <summary>
         /// Дополнительный ускоритель
         /// </summary>
@@ -84,27 +87,31 @@ namespace Race
         private void FixedUpdate()
         {
             UpdateBikePhysics();
+            UpdateAfterBurnerHeat();
+        }
+
+        private void UpdateAfterBurnerHeat()
+        {
+            _afterBurnerHeat -= _bikeParametersInit.afterBurnerCoolSpeed * Time.deltaTime;
+
+            if (_afterBurnerHeat < 0)
+                _afterBurnerHeat = 0;
+
+            if (EnableAfterBurner)
+                _afterBurnerHeat += _bikeParametersInit.afterBurnerHeatGeneration * Time.deltaTime;
+        }
+
+        public float GetNormalizedHeat()
+        {
+            if (_bikeParametersInit.afterBurnerMaxHeat > 0)
+                return _afterBurnerHeat / _bikeParametersInit.afterBurnerMaxHeat;
+            
+            return 0;
         }
 
         private void UpdateBikePhysics()
         {
             float dt = Time.deltaTime;
-            
-            // работа ускорителя
-            float fthrustMax = _bikeParametersInit.thrust;
-            float vMax = _bikeParametersInit.maxSpeed;
-            float f = _forwardThrustAxis * _bikeParametersInit.thrust;
-            if (EnableAfterBurner)
-            {
-                f += _bikeParametersInit.afterBurnerThrust;
-                vMax += _bikeParametersInit.afterburnerMaxSpeedBonus;
-                fthrustMax += _bikeParametersInit.afterBurnerThrust;
-            }
-
-            f += -_velocity * (fthrustMax / vMax);
-            _velocity += dt * f;
-
-
             float dS = _velocity * dt;
 
             //collision
@@ -115,6 +122,7 @@ namespace Race
             }
 
             CalcRollVelocity();
+            CalcAfterBurner();
 
             _distance += dS;
 
@@ -133,9 +141,21 @@ namespace Race
 
         private void CalcAfterBurner()
         {
-            
+            float dt = Time.deltaTime;
+            float fthrustMax = _bikeParametersInit.thrust;
+            float vMax = _bikeParametersInit.maxSpeed;
+            float f = _forwardThrustAxis * _bikeParametersInit.thrust;
+            if (EnableAfterBurner)
+            {
+                f += _bikeParametersInit.afterBurnerThrust;
+                vMax += _bikeParametersInit.afterburnerMaxSpeedBonus;
+                fthrustMax += _bikeParametersInit.afterBurnerThrust;
+            }
+
+            f += -_velocity * (fthrustMax / vMax);
+            _velocity += dt * f;
         }
-        
+
         public void CalcRollVelocity()
         {
             float dt = Time.deltaTime;
