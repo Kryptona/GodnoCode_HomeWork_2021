@@ -40,6 +40,8 @@ namespace Race
             {
                 activeBike.SetHorizontalThrustAxis(-1);
             }
+
+            activeBike.EnableAfterBurner = Input.GetKey(KeyCode.Space);
         }
     }
 }
