@@ -33,10 +33,10 @@ namespace Race
                 activeBike.SetForwardThrustAxis(-1);
             }
 
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.D))
             {
                 activeBike.SetHorizontalThrustAxis(1);
-            } else if (Input.GetKey(KeyCode.D))
+            } else if (Input.GetKey(KeyCode.A))
             {
                 activeBike.SetHorizontalThrustAxis(-1);
             }
