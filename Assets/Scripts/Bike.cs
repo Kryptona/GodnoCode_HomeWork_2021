@@ -50,6 +50,7 @@ namespace Race
 
         [SerializeField] private RaceTrack _track;
 
+        //перегрев
         private float _afterBurnerHeat;
 
         private float _distance;
@@ -66,6 +67,7 @@ namespace Race
 
         public RaceTrack Track => _track;
 
+        //топливо
         private float _fuel;
         public float Fuel => _fuel;
 
@@ -92,17 +94,14 @@ namespace Race
 
         public void SetHorizontalThrustAxis(float value) => _horizontalThrustAxis = value;
 
-
         private void FixedUpdate()
         {
             UpdateBikePhysics();
             UpdateAfterBurnerHeat();
         }
 
-        public void CoolAfterBurner()
-        {
-            _afterBurnerHeat = 0;
-        }
+        //охлаждение
+        public void CoolAfterBurner() => _afterBurnerHeat = 0;
 
         private void UpdateAfterBurnerHeat()
         {
@@ -110,9 +109,6 @@ namespace Race
 
             if (_afterBurnerHeat < 0)
                 _afterBurnerHeat = 0;
-
-            // if (EnableAfterBurner)
-               
         }
 
         public float GetNormalizedHeat()
@@ -128,7 +124,7 @@ namespace Race
             float dt = Time.deltaTime;
             float dS = _velocity * dt;
 
-            //collision
+            //collision with obstacle
             if (Physics.Raycast(transform.position, transform.forward, dS))
             {
                 _velocity = -_velocity * _bikeParametersInit.collisionBounceFactor;
