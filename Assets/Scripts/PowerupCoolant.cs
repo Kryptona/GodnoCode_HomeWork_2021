@@ -6,9 +6,10 @@ namespace Race
 {
     public class PowerupCoolant : Powerup
     {
-        public override void OnPickedByPlayer()
+        public override void OnPickedByBike(Bike bike)
         {
-            throw new System.NotImplementedException();
+            bike.CoolAfterBurner();
+            Debug.Log("PowerupCoolant " + bike.name);
         }
     }
 }

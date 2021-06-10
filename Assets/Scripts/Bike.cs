@@ -42,6 +42,8 @@ namespace Race
     /// </summary>
     public class Bike : MonoBehaviour
     {
+        public static readonly string Tag = "Bike";
+
         [SerializeField] private BikeParameters _bikeParametersInit;
 
         [SerializeField] private BikeViewController m_VisualController;
@@ -59,7 +61,13 @@ namespace Race
         public float Velocity => _velocity;
         public float RollAngle => _rollAngle;
 
+        private float _prevDistance;
+        public float PrevDistance => _prevDistance;
+
         public RaceTrack Track => _track;
+
+        private float _fuel;
+        public float Fuel => _fuel;
 
         /// <summary>
         /// Нормализованное значение, управление газом байка. От -1 до +1
@@ -84,10 +92,16 @@ namespace Race
 
         public void SetHorizontalThrustAxis(float value) => _horizontalThrustAxis = value;
 
+
         private void FixedUpdate()
         {
             UpdateBikePhysics();
             UpdateAfterBurnerHeat();
+        }
+
+        public void CoolAfterBurner()
+        {
+            _afterBurnerHeat = 0;
         }
 
         private void UpdateAfterBurnerHeat()
@@ -97,15 +111,15 @@ namespace Race
             if (_afterBurnerHeat < 0)
                 _afterBurnerHeat = 0;
 
-            if (EnableAfterBurner)
-                _afterBurnerHeat += _bikeParametersInit.afterBurnerHeatGeneration * Time.deltaTime;
+            // if (EnableAfterBurner)
+               
         }
 
         public float GetNormalizedHeat()
         {
             if (_bikeParametersInit.afterBurnerMaxHeat > 0)
                 return _afterBurnerHeat / _bikeParametersInit.afterBurnerMaxHeat;
-            
+
             return 0;
         }
 
@@ -124,6 +138,7 @@ namespace Race
             CalcRollVelocity();
             CalcAfterBurner();
 
+            _prevDistance = _distance;
             _distance += dS;
 
             if (_distance < 0)
@@ -145,8 +160,10 @@ namespace Race
             float fthrustMax = _bikeParametersInit.thrust;
             float vMax = _bikeParametersInit.maxSpeed;
             float f = _forwardThrustAxis * _bikeParametersInit.thrust;
-            if (EnableAfterBurner)
+            if (EnableAfterBurner && ConsumeFuelForAfterBurner(1.0f * Time.deltaTime))
             {
+                _afterBurnerHeat += _bikeParametersInit.afterBurnerHeatGeneration * Time.deltaTime;
+                
                 f += _bikeParametersInit.afterBurnerThrust;
                 vMax += _bikeParametersInit.afterburnerMaxSpeedBonus;
                 fthrustMax += _bikeParametersInit.afterBurnerThrust;
@@ -163,6 +180,23 @@ namespace Race
             _rollVelocity = Mathf.Clamp(_rollVelocity, -_bikeParametersInit.maxSpeedRotation, _bikeParametersInit.maxSpeedRotation);
             _rollVelocity += -_rollVelocity * _bikeParametersInit.leanerDrag * dt;
             _rollAngle += _rollVelocity * dt;
+        }
+
+        public void AddFuel(float amount)
+        {
+            _fuel += amount;
+
+            _fuel = Mathf.Clamp(_fuel, 0, 100);
+        }
+        
+        public bool ConsumeFuelForAfterBurner(float amount)
+        {
+            if (_fuel < amount)
+                return false;
+
+            _fuel -= amount;
+
+            return true;
         }
     }
 }
