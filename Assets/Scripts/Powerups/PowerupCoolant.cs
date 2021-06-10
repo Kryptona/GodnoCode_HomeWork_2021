@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Race;
 using UnityEngine;
 
-namespace Race
+namespace Powerups
 {
     public class PowerupCoolant : Powerup
     {

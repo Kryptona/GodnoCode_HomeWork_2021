@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Tracks;
 using UnityEngine;
 
 namespace Race
@@ -20,6 +21,7 @@ namespace Race
         public float afterBurnerCoolSpeed; // per second
         public float afterBurnerHeatGeneration; // per second
         public float afterBurnerMaxHeat; // per second
+        
 
         [Range(0.0f, 100.0f)] public float agility;
         [Range(0.0f, 1.0f)] public float leanerDrag;
@@ -100,9 +102,11 @@ namespace Race
             UpdateAfterBurnerHeat();
         }
 
-        //охлаждение
         public void CoolAfterBurner() => _afterBurnerHeat = 0;
 
+        /// <summary>
+        /// Остывание
+        /// </summary>
         private void UpdateAfterBurnerHeat()
         {
             _afterBurnerHeat -= _bikeParametersInit.afterBurnerCoolSpeed * Time.deltaTime;
@@ -129,6 +133,7 @@ namespace Race
             {
                 _velocity = -_velocity * _bikeParametersInit.collisionBounceFactor;
                 dS = _velocity * dt;
+                AddAfterBurnerByObstacle();
             }
 
             CalcRollVelocity();
@@ -159,7 +164,7 @@ namespace Race
             if (EnableAfterBurner && ConsumeFuelForAfterBurner(1.0f * Time.deltaTime))
             {
                 _afterBurnerHeat += _bikeParametersInit.afterBurnerHeatGeneration * Time.deltaTime;
-                
+
                 f += _bikeParametersInit.afterBurnerThrust;
                 vMax += _bikeParametersInit.afterburnerMaxSpeedBonus;
                 fthrustMax += _bikeParametersInit.afterBurnerThrust;
@@ -167,6 +172,24 @@ namespace Race
 
             f += -_velocity * (fthrustMax / vMax);
             _velocity += dt * f;
+        }
+
+        /// <summary>
+        /// Снижает скорость при прохождении через замедляющий паверап
+        /// </summary>
+        /// <param name="velocityDebuff">Часть от скорости, на которую основная скорость будет снижена</param>
+        public void ToBrakeByPowerup(float velocityDebuff)
+        {
+            if (_velocity > 0)
+                _velocity -= _velocity * velocityDebuff;
+        }
+
+        /// <summary>
+        /// Делает перегрев максимальным, если было столкновение с препятствием
+        /// </summary>
+        private void AddAfterBurnerByObstacle()
+        {
+            _afterBurnerHeat = _bikeParametersInit.afterBurnerMaxHeat;
         }
 
         public void CalcRollVelocity()
@@ -181,10 +204,9 @@ namespace Race
         public void AddFuel(float amount)
         {
             _fuel += amount;
-
             _fuel = Mathf.Clamp(_fuel, 0, 100);
         }
-        
+
         public bool ConsumeFuelForAfterBurner(float amount)
         {
             if (_fuel < amount)
