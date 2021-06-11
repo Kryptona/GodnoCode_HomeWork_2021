@@ -86,14 +86,13 @@ namespace Race
             }
 
             _distance += dS;
+            _rollAngle += _rollVelocity * dt;
 
             _velocity += -_velocity * _bikeParametersInit.leanerDrag * dt;
             _rollVelocity += -_rollVelocity * _bikeParametersInit.leanerDrag * dt;
 
             if (_distance < 0)
                 _distance = 0;
-
-            _rollAngle += _rollVelocity * dt;
 
             Vector3 bikePos = _track.GetPosition(_distance);
             Vector3 bikeDir = _track.GetDirection(_distance);
