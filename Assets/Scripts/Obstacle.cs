@@ -42,9 +42,12 @@ namespace Race
             Gizmos.DrawWireSphere(centerLinePos, _track.Radius);
         }
 
+        /// <summary>
+        /// Вращение вокруг оси трека
+        /// </summary>
         private void Rotate()
         {
-            transform.Rotate(0, 0, _speedRotation * Time.deltaTime);
+            transform.RotateAround(_track.GetPosition(_distance), Vector3.forward, _speedRotation * Time.deltaTime);
         }
     }
 }
