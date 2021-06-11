@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Tracks;
+﻿using Tracks;
 using UnityEngine;
 
 namespace Race
@@ -43,10 +40,12 @@ namespace Race
             Gizmos.DrawWireSphere(centerLinePos, _track.Radius);
         }
 
-        //todo переделать, сделать вращение вокруг оси
+        /// <summary>
+        /// Вращение вокруг оси трека
+        /// </summary>
         private void Rotate()
         {
-            transform.Rotate(0, 0, _speedRotation * Time.deltaTime);
+            transform.RotateAround(_track.GetPosition(_distance), Vector3.forward, _speedRotation * Time.deltaTime);
         }
     }
 }
