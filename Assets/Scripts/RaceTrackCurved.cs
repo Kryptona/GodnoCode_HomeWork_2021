@@ -37,6 +37,8 @@ namespace Race
         [SerializeField] private Vector3[] _trackSampledPoints;
 
         [SerializeField] private bool _debugDrawBezier;
+        [SerializeField] private float[] _trackSampledSegmentLengths;
+        [SerializeField] private float _trackSampledLength;
 
         public void GenerateTrackData()
         {
@@ -52,6 +54,21 @@ namespace Race
 
             points.AddRange(GenerateBezierPoints(_trackPoints[_trackPoints.Length - 1], _trackPoints[0], _division));
             _trackSampledPoints = points.ToArray();
+
+            //precompute lengths
+            _trackSampledSegmentLengths = new float[_trackSampledPoints.Length - 1];
+
+            _trackSampledLength = 0;
+
+            for (var i = 0; i < _trackSampledPoints.Length - 1; i++)
+            {
+                Vector3 a = _trackSampledPoints[i];
+                Vector3 b = _trackSampledPoints[i + 1];
+
+                float segmentLength = (b - a).magnitude;
+                _trackSampledSegmentLengths[i] = segmentLength;
+                _trackSampledLength += segmentLength;
+            }
 
             //ЧТобы Unity обновила данные
             EditorUtility.SetDirty(this);
@@ -103,19 +120,50 @@ namespace Race
                 1.0f);
         }
 
-        public override float GetTrackLength()
+        public override Vector3 GetDirection(float distance)
         {
-            return 1.0f;
+            //чтобы сделать значение дистанции цикличным
+            distance = Mathf.Repeat(distance, _trackSampledLength);
+
+            for (var i = 0; i < _trackSampledSegmentLengths.Length; i++)
+            {
+                float diff = distance - _trackSampledSegmentLengths[i];
+
+                if (diff < 0)
+                {
+                    return (_trackSampledPoints[i + 1] - _trackSampledPoints[i]).normalized;
+                }
+                else
+                    distance -= _trackSampledSegmentLengths[i];
+            }
+
+            return Vector3.forward;
         }
 
         public override Vector3 GetPosition(float distance)
         {
+            //чтобы сделать значение дистанции цикличным
+            distance = Mathf.Repeat(distance, _trackSampledLength);
+
+            for (var i = 0; i < _trackSampledSegmentLengths.Length; i++)
+            {
+                float diff = distance - _trackSampledSegmentLengths[i];
+
+                if (diff < 0)
+                {
+                    float t = distance / _trackSampledSegmentLengths[i];
+                    return Vector3.Lerp(_trackSampledPoints[i], _trackSampledPoints[i + 1], t);
+                }
+                else
+                    distance -= _trackSampledSegmentLengths[i];
+            }
+
             return Vector3.zero;
         }
 
-        public override Vector3 GetDirection(float distance)
+        public override float GetTrackLength()
         {
-            return Vector3.zero;
+            return _trackSampledLength;
         }
     }
 }
