@@ -123,6 +123,11 @@ namespace Race
             return 0;
         }
 
+        public float GetNormalizedSpeed()
+        {
+            return Mathf.Clamp01(_velocity / _bikeParametersInit.maxSpeed);
+        }
+
         private void UpdateBikePhysics()
         {
             float dt = Time.deltaTime;
