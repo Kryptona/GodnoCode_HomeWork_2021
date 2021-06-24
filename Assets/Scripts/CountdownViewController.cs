@@ -19,7 +19,6 @@ namespace Race
             if (text != 0)
             {
                 _label.text = text.ToString();
-                
             }
             else
             {
@@ -28,7 +27,7 @@ namespace Race
                 {
                     _label.text = "GO!";
                     isGo = false;
-                    Invoke("DisableText", 2f);
+                    Invoke("DisableText", 1.5f);
                 }
             }
         }

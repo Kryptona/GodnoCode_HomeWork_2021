@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Tracks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,6 +9,8 @@ namespace Race
 {
     public class RaceController : MonoBehaviour
     {
+        [SerializeField] private RaceTrack _track;
+        
         [SerializeField] private int _maxLaps;
         public int MaxLaps => _maxLaps;
 
@@ -39,20 +42,26 @@ namespace Race
 
         public void StartRace()
         {
+            _activeBikes = new List<Bike>(_bikes);
+            _finishedBikes = new List<Bike>();
+            
             isRaceActive = true;
 
             _countTimer = _countdownTimer;
-            
+
             foreach (var condition in _conditions)
                 condition.OnRaceStart();
-            
+
+            foreach (var bike in _bikes)
+                bike.OnRaceStart();
+
             _eventRaceStart?.Invoke();
         }
 
         public void EndRace()
         {
             isRaceActive = false;
-            
+
             foreach (var condition in _conditions)
                 condition.OnRaceEnd();
         }
@@ -67,6 +76,7 @@ namespace Race
             if (!isRaceActive)
                 return;
 
+            UpdateBikeRacePositions();
             UpdateRacePrestart();
             UpdateConditions();
         }
@@ -77,7 +87,7 @@ namespace Race
             {
                 _countTimer -= Time.deltaTime;
 
-                if (_countTimer < 0)
+                if (_countTimer <= 0)
                 {
                     foreach (var bike in _bikes)
                         bike.isMovementControlsActive = true;
@@ -87,7 +97,7 @@ namespace Race
 
         private void UpdateConditions()
         {
-            if (!isRaceActive)
+            if (isRaceActive)
                 return;
 
             foreach (var condition in _conditions)
@@ -96,8 +106,39 @@ namespace Race
                     return;
 
                 EndRace();
-                
+
                 _eventRaceFinish?.Invoke();
+            }
+        }
+
+        private List<Bike> _activeBikes;
+        private List<Bike> _finishedBikes;
+
+        [SerializeField] private RaceResultsViewController _raceResultsViewController;
+        
+        //приехал ли байк до конца трека
+        private void UpdateBikeRacePositions()
+        {
+            foreach (var bike in _activeBikes)
+            {
+                if(_finishedBikes.Contains(bike))
+                    continue;
+                
+                float dist = bike.Distance;
+                float totalRaceDistance = _maxLaps * _track.GetTrackLength();
+
+                if (dist > totalRaceDistance)
+                {
+                    _finishedBikes.Add(bike);
+                    bike.Statistics.RacePlace = _finishedBikes.Count;
+                    bike.OnRaceEnd();
+                    //todo удалить из гонки или выключить управление
+
+                    if (bike.IsPlayerBike)
+                    {
+                        _raceResultsViewController.Show(bike.Statistics);
+                    }
+                }
             }
         }
     }
