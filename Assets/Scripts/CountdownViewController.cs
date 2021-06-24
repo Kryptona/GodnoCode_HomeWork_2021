@@ -22,7 +22,6 @@ namespace Race
             }
             else
             {
-                //todo оптимизировать это
                 if(isGo)
                 {
                     _label.text = "GO!";

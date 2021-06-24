@@ -20,8 +20,6 @@ namespace Race
         [SerializeField] private bool _randomizeExists;
         [SerializeField] private int _randomSeed;
 
-        //todo сделать префаб типа колечка и разместить его на треке
-
         private void Start()
         {
             var random = new System.Random(_randomSeed);
