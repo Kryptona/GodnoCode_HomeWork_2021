@@ -60,6 +60,8 @@ namespace Race
         private float _rollAngle;
         private float _rollVelocity;
 
+        public bool isMovementControlsActive { get; set; }
+        
         public float Distance => _distance;
         public float Velocity => _velocity;
         public float RollAngle => _rollAngle;

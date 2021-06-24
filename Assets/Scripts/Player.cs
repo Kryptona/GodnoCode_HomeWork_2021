@@ -13,7 +13,7 @@ namespace Race
         [SerializeField] private string nickName;
         public string Nickname => nickName;
 
-        [SerializeField] private Bike activeBike;
+        [SerializeField] private Bike _activeBike;
 
         private void FixedUpdate()
         {
@@ -22,26 +22,29 @@ namespace Race
 
         private void ControlBike()
         {
-            activeBike.SetForwardThrustAxis(0);
-            activeBike.SetHorizontalThrustAxis(0);
+            _activeBike.SetForwardThrustAxis(0);
+            _activeBike.SetHorizontalThrustAxis(0);
+            
+            if(!_activeBike.isMovementControlsActive)
+                return;
             
             if (Input.GetKey(KeyCode.W))
             {
-                activeBike.SetForwardThrustAxis(1);
+                _activeBike.SetForwardThrustAxis(1);
             } else if (Input.GetKey(KeyCode.S))
             {
-                activeBike.SetForwardThrustAxis(-1);
+                _activeBike.SetForwardThrustAxis(-1);
             }
 
             if (Input.GetKey(KeyCode.D))
             {
-                activeBike.SetHorizontalThrustAxis(1);
+                _activeBike.SetHorizontalThrustAxis(1);
             } else if (Input.GetKey(KeyCode.A))
             {
-                activeBike.SetHorizontalThrustAxis(-1);
+                _activeBike.SetHorizontalThrustAxis(-1);
             }
 
-            activeBike.EnableAfterBurner = Input.GetKey(KeyCode.Space);
+            _activeBike.EnableAfterBurner = Input.GetKey(KeyCode.Space);
         }
     }
 }
