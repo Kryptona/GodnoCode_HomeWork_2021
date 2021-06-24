@@ -20,14 +20,13 @@ namespace Race
             {
                 var laps = (int) (bike.Distance / bike.Track.GetTrackLength());
 
+                //добавлено вычисление времени лучшего круга
                 if (bike.Statistics.Lap < laps)
                 {
                     var currentTime = Time.time;
                     var lapTime = currentTime - bike.Statistics.CurrentLapStartTime;
                     bike.Statistics.CurrentLapStartTime = currentTime;
                     
-                    Debug.Log("laptime " + lapTime);
-
                     bike.Statistics.Lap = laps;
                     
                     if (bike.Statistics.BestLapTime == null || bike.Statistics.BestLapTime > lapTime)

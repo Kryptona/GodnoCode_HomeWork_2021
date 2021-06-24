@@ -13,6 +13,7 @@ namespace Race
 
         private bool isGo = true;
 
+        //Добавлена логика Go! 
         private void Update()
         {
             var text = (int) _raceController.CountTimer;
