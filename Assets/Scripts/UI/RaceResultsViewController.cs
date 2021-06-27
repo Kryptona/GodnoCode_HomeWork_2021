@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +23,11 @@ namespace Race.UI
             _topSpeed.text = "Top speed: " + ((int)statistics.TopSpeed) + " m/s";
             _totalTime.text = "Total time: " + statistics.TotalTime  + " sec";
             _bestLapTime.text = "Best lap time: " + statistics.BestLapTime  + " sec";
+        }
+
+        public void OnButtonQuit()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(PauseViewController.MainMenuScene);
         }
     }
 }

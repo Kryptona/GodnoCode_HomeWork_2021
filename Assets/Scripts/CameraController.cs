@@ -29,14 +29,17 @@ public class CameraController : MonoBehaviour
 
     private void UpdateCameraShake()
     {
-        var cam = Camera.main;
-        var t = _targetBike.GetNormalizedSpeed();
-        var curveValue = _shakeCurve.Evaluate(t);
+        if (Time.timeScale > 0)
+        {
+            var cam = Camera.main;
+            var t = _targetBike.GetNormalizedSpeed();
+            var curveValue = _shakeCurve.Evaluate(t);
 
-        var ramdomVector = UnityEngine.Random.insideUnitSphere * _shakeFactor;
-        ramdomVector.z = 0;
+            var ramdomVector = UnityEngine.Random.insideUnitSphere * _shakeFactor;
+            ramdomVector.z = 0;
 
-        cam.transform.localPosition = _initLocalPosition + ramdomVector * curveValue;
+            cam.transform.localPosition = _initLocalPosition + ramdomVector * curveValue;
+        }
     }
 
     private void UpdateFov()
