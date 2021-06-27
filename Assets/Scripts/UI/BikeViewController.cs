@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Race
+namespace Race.UI
 {
     public class BikeViewController : MonoBehaviour
     {
