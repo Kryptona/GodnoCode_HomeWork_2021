@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Race
+namespace Race.UI
 {
     public class CountdownViewController : MonoBehaviour
     {
