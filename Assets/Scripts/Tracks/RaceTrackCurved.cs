@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Tracks;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -40,6 +38,7 @@ namespace Race
         [SerializeField] private float[] _trackSampledSegmentLengths;
         [SerializeField] private float _trackSampledLength;
 
+#if UNITY_EDITOR
         public void GenerateTrackData()
         {
             Debug.Log("Generation track buttom");
@@ -85,7 +84,7 @@ namespace Race
                 _trackSampledLength += segmentLength;
             }
 
-            //ЧТобы Unity обновила данные
+            // //ЧТобы Unity обновила данные
             EditorUtility.SetDirty(this);
         }
 
@@ -156,7 +155,7 @@ namespace Race
                 Texture2D.whiteTexture,
                 1.0f);
         }
-
+#endif
         public override Vector3 GetDirection(float distance)
         {
             //чтобы сделать значение дистанции цикличным
@@ -197,7 +196,7 @@ namespace Race
 
             return Vector3.zero;
         }
-        
+
         public override Quaternion GetRotation(float distance)
         {
             distance = Mathf.Repeat(distance, _trackSampledLength);
