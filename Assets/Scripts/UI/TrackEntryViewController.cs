@@ -10,6 +10,7 @@ namespace Race.UI
     {
         [SerializeField] private TrackDescription _trackDescription;
         [SerializeField] private Text _trackName;
+        [SerializeField] private Text _trackLength;
 
         private TrackDescription _activeDescription;
 
