@@ -392,7 +392,7 @@ RectTransform:
   m_Children:
   - {fileID: 2004608821}
   m_Father: {fileID: 1504945487}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -411,7 +411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbda691d2de6bd647afd125d9de4f28d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _screenResolutionDropdown: {fileID: 0}
+  _screenResolutionDropdown: {fileID: 869467244}
   _mainMenuController: {fileID: 494247610}
 --- !u!1 &100798137
 GameObject:
@@ -880,7 +880,7 @@ PrefabInstance:
     - target: {fileID: 5561684218048536140, guid: 1637b4ed1bf7676488a98379f9b3ba0f,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5561684218048536140, guid: 1637b4ed1bf7676488a98379f9b3ba0f,
         type: 3}
@@ -890,7 +890,7 @@ PrefabInstance:
     - target: {fileID: 5561684218048536140, guid: 1637b4ed1bf7676488a98379f9b3ba0f,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5561684218048536140, guid: 1637b4ed1bf7676488a98379f9b3ba0f,
         type: 3}
@@ -940,12 +940,12 @@ PrefabInstance:
     - target: {fileID: 5561684218048536140, guid: 1637b4ed1bf7676488a98379f9b3ba0f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 512
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5561684218048536140, guid: 1637b4ed1bf7676488a98379f9b3ba0f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -317
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5561684218048536140, guid: 1637b4ed1bf7676488a98379f9b3ba0f,
         type: 3}
@@ -1007,7 +1007,7 @@ RectTransform:
   m_Children:
   - {fileID: 57572408}
   m_Father: {fileID: 1504945487}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1693,7 +1693,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: 1280 x 1024
       m_Image: {fileID: 0}
-    - m_Text: 1024 x 768
+    - m_Text: 800 x 600
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1701,7 +1701,7 @@ MonoBehaviour:
       - m_Target: {fileID: 71004575}
         m_TargetAssemblyTypeName: Race.UI.OptionsViewController, Assembly-CSharp
         m_MethodName: HandleInputData
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1955,7 +1955,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &985573722
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1969,7 +1969,7 @@ RectTransform:
   m_Children:
   - {fileID: 1955772041}
   m_Father: {fileID: 1504945487}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2537,9 +2537,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 985573722}
   - {fileID: 494247609}
   - {fileID: 71004574}
+  - {fileID: 985573722}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3354,7 +3354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _trackDescription: {fileID: 11400000, guid: 5fa1e96bd5a7d494d970f0379acc4a30, type: 2}
   _trackName: {fileID: 1047748159}
-  _trackLength: {fileID: 414689916}
+  _trackLengthText: {fileID: 414689916}
 --- !u!1 &1974329635
 GameObject:
   m_ObjectHideFlags: 0

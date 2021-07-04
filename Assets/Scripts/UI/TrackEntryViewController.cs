@@ -1,3 +1,4 @@
+using Tracks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace Race.UI
     {
         [SerializeField] private TrackDescription _trackDescription;
         [SerializeField] private Text _trackName;
-        [SerializeField] private Text _trackLength;
+        [SerializeField] private Text _trackLengthText;
 
         private TrackDescription _activeDescription;
 
@@ -25,6 +26,8 @@ namespace Race.UI
             _activeDescription = description;
             
             _trackName.text = description.TrackName;
+
+            _trackLengthText.text = _trackDescription.RaceTrack.GetTrackLength().ToString();
         }
         public void OnButtonStartLevel()
         {

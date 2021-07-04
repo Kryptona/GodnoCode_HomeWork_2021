@@ -15,3 +15,5 @@ MonoBehaviour:
   _trackName: DevTrack
   _sceneNickname: scene_dev
   _previewImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  _raceTrack: {fileID: 5884314537488535060, guid: bc887b92359125843ab8c722022f7c3a,
+    type: 3}
