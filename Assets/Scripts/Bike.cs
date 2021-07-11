@@ -42,6 +42,9 @@ namespace Race
     /// </summary>
     public class Bike : MonoBehaviour
     {
+        [SerializeField] private AnimationCurve _collisionVolumeCurve;
+        [SerializeField] private AudioSource _collisionSfx;
+        
         public static readonly string Tag = "Bike";
 
         [SerializeField] private bool _isPlayerBike;
@@ -143,6 +146,10 @@ namespace Race
             //collision with obstacle
             if (Physics.Raycast(transform.position, transform.forward, dS))
             {
+                //зависимость громкости столкновения от скорости
+                _collisionSfx.volume = _collisionVolumeCurve.Evaluate(GetNormalizedSpeed());
+                _collisionSfx.Play();
+                
                 _velocity = -_velocity * _bikeParametersInit.collisionBounceFactor;
                 dS = _velocity * dt;
                 AddAfterBurnerByObstacle();
