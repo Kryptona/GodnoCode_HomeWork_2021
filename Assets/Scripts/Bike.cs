@@ -148,7 +148,7 @@ namespace Race
             {
                 //зависимость громкости столкновения от скорости
                 _collisionSfx.volume = _collisionVolumeCurve.Evaluate(GetNormalizedSpeed());
-                _collisionSfx.Play();
+                _collisionSfx.Play(); 
                 
                 _velocity = -_velocity * _bikeParametersInit.collisionBounceFactor;
                 dS = _velocity * dt;
