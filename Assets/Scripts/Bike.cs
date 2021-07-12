@@ -1,4 +1,6 @@
-﻿using Race.UI;
+﻿using System;
+using Powerups;
+using Race.UI;
 using Tracks;
 using UnityEngine;
 
@@ -44,7 +46,7 @@ namespace Race
     {
         [SerializeField] private AnimationCurve _collisionVolumeCurve;
         [SerializeField] private AudioSource _collisionSfx;
-        
+
         public static readonly string Tag = "Bike";
 
         [SerializeField] private bool _isPlayerBike;
@@ -134,6 +136,23 @@ namespace Race
             return Mathf.Clamp01(_velocity / _bikeParametersInit.maxSpeed);
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.TryGetComponent<Powerup>(out var powerup))
+            {
+                powerup.OnPickedByBike(this);
+                Destroy(other.gameObject);
+                return;
+            }
+
+            //зависимость громкости столкновения от скорости
+            _collisionSfx.volume = _collisionVolumeCurve.Evaluate(GetNormalizedSpeed());
+            _collisionSfx.Play();
+
+            _velocity = -_velocity * _bikeParametersInit.collisionBounceFactor;
+            AddAfterBurnerByObstacle();
+        }
+
         private void UpdateBikePhysics()
         {
             float dt = Time.deltaTime;
@@ -144,16 +163,16 @@ namespace Race
                 _bikeStatistics.TopSpeed = Mathf.Abs(_velocity);
 
             //collision with obstacle
-            if (Physics.Raycast(transform.position, transform.forward, dS))
-            {
-                //зависимость громкости столкновения от скорости
-                _collisionSfx.volume = _collisionVolumeCurve.Evaluate(GetNormalizedSpeed());
-                _collisionSfx.Play(); 
-                
-                _velocity = -_velocity * _bikeParametersInit.collisionBounceFactor;
-                dS = _velocity * dt;
-                AddAfterBurnerByObstacle();
-            }
+            // if (Physics.Raycast(transform.position, transform.forward, dS))
+            // {
+            //     //зависимость громкости столкновения от скорости
+            //     _collisionSfx.volume = _collisionVolumeCurve.Evaluate(GetNormalizedSpeed());
+            //     _collisionSfx.Play(); 
+            //     
+            //     _velocity = -_velocity * _bikeParametersInit.collisionBounceFactor;
+            //     dS = _velocity * dt;
+            //     AddAfterBurnerByObstacle();
+            // }
 
             CalcRollVelocity();
             CalcAfterBurner();
@@ -245,10 +264,10 @@ namespace Race
             public float TotalTime;
             public int RacePlace;
             public float? BestLapTime;
-            
+
             //время начала текущего круга
             public float CurrentLapStartTime;
-            
+
             //номер текущего круга
             public int Lap;
         }
@@ -273,6 +292,5 @@ namespace Race
         {
             _bikeStatistics.TotalTime = Time.time - _raceStartTime;
         }
-
     }
 }

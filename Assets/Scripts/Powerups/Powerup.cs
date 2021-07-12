@@ -6,7 +6,7 @@ namespace Powerups
 {
     public abstract class Powerup : MonoBehaviour
     {
-        [SerializeField] private RaceTrack _track;
+        [SerializeField] public RaceTrack _track;
         [SerializeField] private float _rollAngle;
         [SerializeField] private float _distance;
 
@@ -29,7 +29,7 @@ namespace Powerups
 
         private void FixedUpdate()
         {
-            UpdateBikes();
+            // UpdateBikes();
         }
 
         private void UpdateBikes()

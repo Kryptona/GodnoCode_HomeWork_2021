@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Powerups;
 using Tracks;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -29,6 +30,10 @@ namespace Race
                 if (!_randomizeExists || random.NextDouble() < 0.5)
                 {
                     var prefab = Instantiate(_prefab);
+                    if (prefab.TryGetComponent<Powerup>(out var powerup))
+                    {
+                        powerup._track = _track;
+                    }
 
                     prefab.transform.position = _track.GetPosition(distance);
                     prefab.transform.rotation = _track.GetRotation(distance);
