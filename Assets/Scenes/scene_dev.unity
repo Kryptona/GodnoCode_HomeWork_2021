@@ -12354,7 +12354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefab: {fileID: 2176975976719106810, guid: 1d1646ef77c65be4b86867970b848af3, type: 3}
-  _numObjects: 5
+  _numObjects: 15
   _track: {fileID: 462723840}
   _randomizeRotation: 1
   _randomizeExists: 1
@@ -16988,7 +16988,7 @@ LightingSettings:
   m_PrefabAsset: {fileID: 0}
   m_Name: Settings.lighting
   serializedVersion: 3
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_EnableBakedLightmaps: 1
   m_EnableRealtimeLightmaps: 0
   m_RealtimeEnvironmentLighting: 1
@@ -19080,6 +19080,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5884314537488535060, guid: bc887b92359125843ab8c722022f7c3a,
+        type: 3}
+      propertyPath: _division
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 5884314537488535061, guid: bc887b92359125843ab8c722022f7c3a,
         type: 3}
       propertyPath: m_RootOrder
